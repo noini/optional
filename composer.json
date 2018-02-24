@@ -1,0 +1,13 @@
+{
+    "name": "noini/optional",
+    "description": "Optional class for various purposes",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jouni Jouppila",
+            "email": "jouni@noini.net"
+        }
+    ],
+    "require": {}
+}
