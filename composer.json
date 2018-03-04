@@ -1,13 +1,23 @@
 {
-    "name": "noini/optional",
-    "description": "Optional class for various purposes",
-    "type": "library",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Jouni Jouppila",
-            "email": "jouni@noini.net"
-        }
-    ],
-    "require": {}
+  "name": "noini/optional",
+  "description": "Optional class for various purposes",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Jouni Jouppila",
+      "email": "jouni@noini.net"
+    }
+  ],
+  "minimum-stability": "stable",
+  "require": {},
+  "require-dev": {
+    "phpunit/phpunit": "^6.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "Noini\\Optional\\": "src/Noini/Optional"
+    },
+    "files": ["src/Noini/Optional/OptionalFunction.php"]
+  }
 }
