@@ -48,7 +48,12 @@ class Optional implements OptionalInterface
     public function has($comparison): Has
     {
         if (is_callable($comparison)) {
-            return $this->createStoredHas((bool)call_user_func($comparison, $this->getPayload()));
+            $result = call_user_func($comparison, $this->getPayload());
+            if (!is_bool($result)) {
+                throw new \UnexpectedValueException('Optional has() method expect callable to return bool value');
+            }
+
+            return $this->createStoredHas($result);
         }
 
         $hasPassed = $this->compareType($this->getPayload(), $comparison) ?:
@@ -81,7 +86,7 @@ class Optional implements OptionalInterface
      */
     public function if($compare, callable $callback): IfElse
     {
-        return (new IfElse($this))->if($compare, $callback);
+        return IfElse::create($this)->if($compare, $callback);
     }
 
     /**

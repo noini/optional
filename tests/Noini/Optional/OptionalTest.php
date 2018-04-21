@@ -4,17 +4,28 @@ namespace Noini\Optional;
 
 use Noini\Optional\Helpers\Types;
 use PHPUnit\Framework\TestCase;
+use UnexpectedValueException;
 
 class OptionalTest extends TestCase
 {
+    private static $objectHasCalled;
+
     protected function setUp()
     {
         parent::setUp();
+
+        self::$objectHasCalled = false;
     }
 
     protected function failCallback()
     {
         $this->fail("Callback should not be called");
+    }
+
+    public static function objectCallTest($data)
+    {
+        TestCase::assertFalse(empty($data));
+        self::$objectHasCalled = true;
     }
 
     public function testCreate_whenCalled_shouldReturnNewOptionalInstance()
@@ -51,6 +62,12 @@ class OptionalTest extends TestCase
         });
     }
 
+    public function testThen_whenNonNullPayload_withCallableStringCallback_shouldBeCalled()
+    {
+        optional("non-null")->then(__CLASS__ . "::objectCallTest");
+        $this->assertTrue(self::$objectHasCalled, "Did not call static callback method");
+    }
+
     public function testHas_whenNullPayload_withNullTypeCheck_shouldCallThen()
     {
         optional(null)->has(Types::NULL)->then(function ($value) {
@@ -75,6 +92,21 @@ class OptionalTest extends TestCase
         });
     }
 
+    /**
+     * @doesNotPerformAssertions
+     */
+    public function testThen_whenHasBeenCalled_shouldUseLastHasResult()
+    {
+        optional(true)
+            ->has("You shall not pass")
+            ->then(function () {
+                $this->failCallback();
+            })
+            ->then(function () {
+                $this->failCallback();
+            });
+    }
+
     public function testGetResult_whenHasIsSuccessful_shouldReturnTrue()
     {
         $payload = "expected string";
@@ -87,5 +119,27 @@ class OptionalTest extends TestCase
         $payload = "123 unexpected string";
         $result = optional($payload)->has(123)->getResult();
         $this->assertFalse($result);
+    }
+
+    public function testHas_whenGivenCallable_shouldCallCallable()
+    {
+        $calledCallable = false;
+        $payload = 10;
+        optional($payload)
+            ->has(function ($data) use ($payload, &$calledCallable) {
+                $calledCallable = true;
+                return $data === $payload;
+            });
+
+        $this->assertTrue($calledCallable, "Did not call callable");
+    }
+
+    public function testHas_whenGivenCallable_thatDoesNotReturnBool_shouldThrowException()
+    {
+        $this->expectException(UnexpectedValueException::class);
+
+        optional("stuff")->has(function () {
+            return "nope.jpg";
+        });
     }
 }

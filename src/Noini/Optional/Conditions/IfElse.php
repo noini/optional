@@ -20,6 +20,11 @@ class IfElse implements IfInterface
         $this->optional = $optional;
     }
 
+    public static function create(Optional $optional):IfElse
+    {
+        return new IfElse($optional);
+    }
+
     /**
      * Will be executed if previous IF compare returned false.
      *
