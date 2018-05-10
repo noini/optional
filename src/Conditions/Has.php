@@ -30,7 +30,7 @@ class Has extends Otherwise
     public function then(callable $callback): OtherwiseOptional
     {
         if($this->hasResult) {
-            call_user_func($callback, $this->optional->getPayload());
+            \call_user_func($callback, $this->optional->getPayload());
         }
 
         return new OtherwiseOptional($this->optional, $this->hasResult);

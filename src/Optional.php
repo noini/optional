@@ -8,10 +8,9 @@ use Noini\Optional\Helpers\TypeComparator;
 use Noini\Optional\Interfaces\Optional as OptionalInterface;
 
 /**
- * @package Noini
+ * Optional class wrapper for if-null checking
  *
- * @todo Documentation
- * @todo Tests!
+ * @package Noini\Optional
  */
 class Optional implements OptionalInterface
 {
@@ -47,8 +46,8 @@ class Optional implements OptionalInterface
      */
     public function has($comparison): Has
     {
-        if (is_callable($comparison)) {
-            $result = call_user_func($comparison, $this->getPayload());
+        if (\is_callable($comparison)) {
+            $result = \call_user_func($comparison, $this->getPayload());
             if (!is_bool($result)) {
                 throw new \UnexpectedValueException('Optional has() method expect callable to return bool value');
             }
@@ -73,7 +72,7 @@ class Optional implements OptionalInterface
     {
         if ($this->lastHas === null) {
             if (!$this->payload->isNull()) {
-                call_user_func($callback, $this->getPayload());
+                \call_user_func($callback, $this->getPayload());
             }
         } else {
             return $this->lastHas->then($callback);

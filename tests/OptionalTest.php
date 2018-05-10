@@ -28,6 +28,24 @@ class OptionalTest extends TestCase
         self::$objectHasCalled = true;
     }
 
+    public function typesProvider(): array
+    {
+        return [
+            [Types::STRING, "test string"],
+            [Types::ARRAY, ["test array"]],
+            [Types::BOOLEAN, true],
+            [Types::CALLABLE, function () {
+            }],
+            [Types::DOUBLE, (double)0.5],
+            [Types::FLOAT, (float)0.5],
+            [Types::INTEGER, 123],
+            [Types::ITERABLE, new \ArrayIterator()],
+            [Types::NULL, null],
+            [Types::OBJECT, new \stdClass()],
+            [Types::RESOURCE, fopen("php://memory", 'r')],
+        ];
+    }
+
     public function testCreate_whenCalled_shouldReturnNewOptionalInstance()
     {
         $payload = "content";
@@ -181,5 +199,21 @@ class OptionalTest extends TestCase
             })->else(function () {
                 $this->failCallback();
             });
+    }
+
+    /**
+     * @dataProvider typesProvider
+     * @param $type
+     * @param $payload
+     */
+    public function testHas_whenGivenCertainType_shouldReturnTrue($type, $payload)
+    {
+        $this->assertTrue(optional($payload)->has($type)->getResult());
+    }
+
+    public function testHas_whenGivenClassName_shouldReturnTrue()
+    {
+        $result = optional(new Optional(null))->has(Optional::class)->getResult();
+        $this->assertTrue($result);
     }
 }

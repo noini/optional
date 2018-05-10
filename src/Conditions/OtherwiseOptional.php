@@ -4,6 +4,9 @@ namespace Noini\Optional\Conditions;
 
 use Noini\Optional\Interfaces\Optional;
 
+/**
+ * @codeCoverageIgnore single line commands are not registered by Xdebug
+ */
 class OtherwiseOptional extends Otherwise implements Optional
 {
 
