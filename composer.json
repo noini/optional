@@ -16,8 +16,8 @@
   },
   "autoload": {
     "psr-4": {
-      "Noini\\Optional\\": "src/Noini/Optional"
+      "Noini\\Optional\\": "src/"
     },
-    "files": ["src/Noini/Optional/OptionalFunction.php"]
+    "files": ["src/OptionalFunction.php"]
   }
 }

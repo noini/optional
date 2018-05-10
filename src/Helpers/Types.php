@@ -3,7 +3,10 @@
 namespace Noini\Optional\Helpers;
 
 /**
+ * Contains different type constants for comparison
+ *
  * @package Noini\Optional\Helpers
+ * @codeCoverageIgnore
  */
 class Types
 {

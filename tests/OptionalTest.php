@@ -142,4 +142,44 @@ class OptionalTest extends TestCase
             return "nope.jpg";
         });
     }
+
+    /**
+     * @doesNotPerformAssertions
+     */
+    public function testIf_whenGivenComparisonFails_shouldNotCallCallback()
+    {
+        optional(null)->if(Types::STRING, function () {
+            $this->failCallback();
+        });
+    }
+
+    public function testIf_whenGivenComparisonSucceeds_shouldCallCallback()
+    {
+        $payload = "string value";
+        optional($payload)
+            ->if(Types::STRING, function ($data) use ($payload) {
+                $this->assertSame($payload, $data);
+            });
+    }
+
+    public function testElse_whenIfComparisonFails_shouldCallElseCallback()
+    {
+        optional(null)
+            ->if(Types::STRING, function () {
+                $this->failCallback();
+            })->else(function ($data) {
+                $this->assertNull($data, "Original payload should be null");
+            });
+    }
+
+    public function testElse_whenIfComparisonSucceeds_shouldNotCallElseCallback()
+    {
+        $payload = "this is a string";
+        optional($payload)
+            ->if(Types::STRING, function ($data) use ($payload) {
+                $this->assertSame($payload, $data);
+            })->else(function () {
+                $this->failCallback();
+            });
+    }
 }
