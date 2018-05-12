@@ -1,6 +1,6 @@
 {
   "name": "noini/optional",
-  "description": "Optional class for various purposes",
+  "description": "Optional class for various if-null-else purposes",
   "type": "library",
   "license": "MIT",
   "authors": [
@@ -10,7 +10,9 @@
     }
   ],
   "minimum-stability": "stable",
-  "require": {},
+  "require": {
+    "php": "^7.1"
+  },
   "require-dev": {
     "phpunit/phpunit": "^6.5"
   },
