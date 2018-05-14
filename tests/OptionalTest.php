@@ -62,6 +62,32 @@ class OptionalTest extends TestCase
         $this->assertEquals($payload, $optional->getPayload());
     }
 
+    public function testConstruct_whenGivenCallback_shouldBeCalled()
+    {
+        $called = 0;
+        $expectedPayload = "content 123";
+        $callable = function ($data) use ($expectedPayload, &$called) {
+            $this->assertSame($expectedPayload, $data);
+            $called++;
+        };
+
+        new Optional($expectedPayload, $callable);
+        Optional::create($expectedPayload, $callable);
+        optional($expectedPayload, $callable);
+
+        $this->assertEquals(3, $called, 'Should have used callback function three times');
+    }
+
+    /**
+     * @doesNotPerformAssertions
+     */
+    public function testConstruct_whenGivenNullPayloadAndCallback_shouldNotCallCallback()
+    {
+        optional(null, function () {
+           $this->failCallback();
+        });
+    }
+
     /**
      * @doesNotPerformAssertions
      */

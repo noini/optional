@@ -14,7 +14,6 @@ use Noini\Optional\Interfaces\Optional as OptionalInterface;
  */
 class Optional implements OptionalInterface
 {
-
     use TypeComparator;
 
     /** @var Payload $payload */
@@ -23,9 +22,17 @@ class Optional implements OptionalInterface
     /** @var Has $lastHas */
     protected $lastHas = null;
 
-    public function __construct($payload)
+    /**
+     * @param $payload
+     * @param callable|null $callback
+     */
+    public function __construct($payload, callable $callback = null)
     {
         $this->payload = new Payload($payload);
+
+        if ($callback !== null) {
+            return $this->then($callback);
+        }
 
         return $this;
     }
@@ -34,11 +41,12 @@ class Optional implements OptionalInterface
      * Creates new instance of Optional
      *
      * @param $payload
+     * @param callable|null $callback
      * @return Optional
      */
-    public static function create($payload): Optional
+    public static function create($payload, callable $callback = null): Optional
     {
-        return new Optional($payload);
+        return new Optional($payload, $callback);
     }
 
     /**

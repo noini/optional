@@ -16,13 +16,11 @@ Install via composer
 
 ### Function
 
-With OptionalFunction.php you can define easy to use helper method
-
     optional($payload)->then(...);
 
 ### Simple example
 
-Following example will run callable because $content value is not null. 
+Following example will call callable because $content value is not null. 
 
     $payload = "content string";
     $optional = new Optional($payload);
@@ -34,7 +32,7 @@ Following example will run callable because $content value is not null.
     
 ### has()
 
-With has() method you can check if Optional payload meets requirement(s). 
+Has() method can be used to check if Optional payload meets requirement(s). 
 
 **Null payload**
 
@@ -44,7 +42,7 @@ If Optional payload is null, then has() will fail and create false result.
     
 Null value can be checked with type if needed
 
-    optional(null)->has(Types::NULL)->getResult(); // true
+    optional(null)->has(Noini\Optional\Helpers\Types::NULL)->getResult(); // true
 
 **Using strict equals comparison**
 
@@ -55,20 +53,20 @@ Compares payload to has() parameter.
     
 **Using type check**
 
-With Types class constants you can check if payload data type meets requirement.
+Types class constants can be used to check if payload data type meets requirement.
 
-    optional("50")->has(Types::INTEGER)->getResult(); // false
-    optional("50")->has(Types::STRING)->getResult(); // true
+    optional("50")->has(Noini\Optional\Helpers\Types::INTEGER)->getResult(); // false
+    optional("50")->has(Noini\Optional\Helpers\Types::STRING)->getResult(); // true
 
 **Class checking**
 
-Passing class you can check if payload is instance of given class.
+Passing class will check if payload is instance of given class.
 
     optional(new \stdClass())->has(\stdClass::class)->getResult(); // true;
 
 **Using callback** 
 
-With callback you can customize payload checking. Callback must return boolean.
+Use callback for customized payload checking. Callback must return boolean.
 
     optional(50)->has(function($data) {
         return $data > 10;
@@ -78,13 +76,19 @@ With callback you can customize payload checking. Callback must return boolean.
     
 ### then()
 
-You can directly call callback function if new instance of Optional has non null value:
+Callback function will be called if new instance of Optional has non null value:
 
     optional(1)->then(function($data) {
         echo "I had non null value: " . $data;
     });
+
+Then() can be invoked in constructor by providing callable.
+
+    optional(50, function($data) {
+        echo "Having non null value: " . $data;
+    });
     
-Chained with has() then() will call callable only if latest has() comparison was successful.
+Chained with has() method then() will call callable only if latest has() comparison was successful.
 
     optional(50)
         ->has(Types::INTEGER)
@@ -105,13 +109,13 @@ Otherwise callback will be called if latest has comparison fails.
     
 ### if-else
 
-You can skip has-then method chaining with if() -method. With if() you can define both condition and callback function with one method:
+Has-then method chaining can also be done with if() -method. If() should contain both condition and callback function with one method:
 
     optional("data")->if(Types::STRING, function($data) {
         echo "I had a string value: " . $data;
     });
 
-You can use else() method chained with if
+Use else() method chained with if() 
 
     optional(null)
         ->if(Types::STRING, function($data) {
@@ -121,6 +125,6 @@ You can use else() method chained with if
             echo "This means optional payload was not a string";
         });
     
-**Notice** that you cannot use has-then after you use if.
+**Notice** has-then cannot ne used after if.
 
 
